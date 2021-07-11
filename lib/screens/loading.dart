@@ -11,6 +11,7 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
+  //test
   /* TODO complete overhaul of data (congregate previous month, current month, and
       next months prayer times into one large list in order avoid monthly edge cases
       (we would still need to compensate for the yearly edge cases though)
