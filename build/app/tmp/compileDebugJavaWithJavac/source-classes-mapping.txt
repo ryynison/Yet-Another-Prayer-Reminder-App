@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-xyz/trianglecircle/yet_another_prayer_reminder/BuildConfig.java
- xyz.trianglecircle.yet_another_prayer_reminder.BuildConfig
