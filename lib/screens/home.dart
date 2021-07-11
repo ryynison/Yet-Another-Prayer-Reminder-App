@@ -21,12 +21,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    // TODO put card widget in another function/class and put timer in there for cleaner code
+    // TODO maybe put card widget in another function/class and put timer in there for cleaner code
     // refreshes page ever n seconds
     int n = 1;
-    new Timer.periodic(Duration(seconds: n), (Timer t) => setState((){
-      print(DateTime.now().second);
-    }));
+    new Timer.periodic(Duration(seconds: n), (Timer t) =>
+      setState((){
+        //debugging
+        print(DateTime.now().second);
+        //
+      })
+    );
     WidgetsBinding.instance!.addObserver(this);
   }
   @override
@@ -137,13 +141,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           color: Colors.grey[700],
                         ),
                       ),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/');
-                      },
-                    ),
                     ]
                 ),
                 //Divider(height: 12, thickness: 2,),
