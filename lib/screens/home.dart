@@ -141,6 +141,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           color: Colors.grey[700],
                         ),
                       ),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/');
+                      },
+                    ),
                     ]
                 ),
                 //Divider(height: 12, thickness: 2,),
