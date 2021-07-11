@@ -1,0 +1,4 @@
+#Sat Jul 10 13:08:56 PDT 2021
+base.0=/home/raiyan/Programming/Projects/flutter/yet_another_prayer_reminder/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
