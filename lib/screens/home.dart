@@ -29,11 +29,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     // sets state every n seconds
     int n = 1;
     new Timer.periodic(Duration(seconds: n), (Timer t) =>
-      setState((){
-        //debugging
-        print(DateTime.now().second);
-        //
-      })
+      setState((){})
     );
     WidgetsBinding.instance!.addObserver(this);
   }
@@ -59,8 +55,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     data = ModalRoute.of(context)!.settings.arguments as Map;
 
     // sets up the upcoming and previous timings
-    List<String> upcomingDisplayedTiming = ['', ''];
-    List<String> previousDisplayedTiming = ['', ''];
+    List upcomingTiming = ['', ''];
+    List previousTiming = ['', ''];
 
     DateTime currentTime = DateTime.now();
 
@@ -68,70 +64,74 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     // (will probably be overhauled completely later, current solution is pure jank)
     for(String key in data['today_timings'].keys) {
       if(currentTime.isBefore(data['today_timings'][key])) {
-        List<String> temp1 = [];
+        List temp1 = [];
         String keyTemp;
         switch(key) {
           case 'Fajr': {
             keyTemp = 'Midnight';
             temp1 = [
               keyTemp,
-              DateFormat.jm().format(data['yesterday_timings'][keyTemp]).toLowerCase()
+              data['yesterday_timings'][keyTemp]
             ];
           } break;
           case 'Sunrise': {
             keyTemp = 'Fajr';
             temp1 = [
               keyTemp,
-              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+              data['today_timings'][keyTemp]
             ];
           } break;
           case 'Dhuhr': {
             keyTemp = 'Sunrise';
             temp1 = [
               keyTemp,
-              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+              data['today_timings'][keyTemp]
             ];
           } break;
           case 'Asr': {
             keyTemp = 'Dhuhr';
             temp1 = [
               keyTemp,
-              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+              data['today_timings'][keyTemp]
             ];
           } break;
           case 'Maghrib': {
             keyTemp = 'Asr';
             temp1 = [
               keyTemp,
-              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+              data['today_timings'][keyTemp]
             ];
           } break;
           case 'Isha': {
             keyTemp = 'Maghrib';
             temp1 = [
               keyTemp,
-              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+              data['today_timings'][keyTemp]
             ];
           } break;
           case 'Midnight': {
             keyTemp = 'Isha';
             temp1 = [
               keyTemp,
-              DateFormat.jm().format(data['tomorrow_timings'][keyTemp]).toLowerCase()
+              data['tomorrow_timings'][keyTemp]
             ];
           } break;
         }
 
-        previousDisplayedTiming = temp1;
+        previousTiming = temp1;
 
-        List<String> temp2 = [
+        List temp2 = [
           key,
-          DateFormat.jm().format(data['today_timings'][key]).toLowerCase()
+          data['today_timings'][key]
         ];
-        upcomingDisplayedTiming = temp2;
+        upcomingTiming = temp2;
         break;
       }
     }
+
+    // Calculate time difference for countdown timer
+    int difference = upcomingTiming[1].difference(currentTime).inSeconds;
+    String countdown = '-${Duration(seconds: difference).toString().substring(0,7)}';
 
     return Scaffold(
       body: SafeArea(
@@ -191,7 +191,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           Row(
                             children: [
                               Text(
-                                '${upcomingDisplayedTiming[0]}',
+                                '${upcomingTiming[0]}',
                                 style: TextStyle(
                                     fontSize: 36,
                                     color: Colors.black,
@@ -202,7 +202,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                               Column(
                                 children: [
                                   Text(
-                                      '${upcomingDisplayedTiming[1]}',
+                                      '${DateFormat.jm().format(upcomingTiming[1]).toLowerCase()}',
                                       style: TextStyle(
                                           fontSize: 24,
                                           color: Colors.black,
@@ -211,7 +211,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                                   ),
                                   SizedBox(height: 4,),
                                   Text(
-                                    '-3:28:59',
+                                    countdown,
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[700],
@@ -232,7 +232,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                           Row(
                             children: [
                               Text(
-                                  '${previousDisplayedTiming[0]}',
+                                  '${previousTiming[0]}',
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.black,
@@ -241,7 +241,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                               ),
                               Spacer(),
                               Text(
-                                  '${previousDisplayedTiming[1]}',
+                                  '${DateFormat.jm().format(previousTiming[1]).toLowerCase()}',
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.black,
