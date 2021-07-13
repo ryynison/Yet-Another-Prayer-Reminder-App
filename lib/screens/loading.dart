@@ -16,23 +16,25 @@ class _LoadingState extends State<Loading> {
       (we would still need to compensate for the yearly edge cases though)
   */
 
-  // initializes the prayer time data called from the API
+  // initializes the prayer time data called from the API/loaded from cache
   // and then navigates to the home screen when the data is loaded
   void initPrayerTimes() async {
+
     // get current location and time
     CurrentSetting setting = CurrentSetting();
     await setting.getCurrentLocation();
-    // sets up prayer times data object
-    PrayerTimes prayerTimes = PrayerTimes(setting);
-    await prayerTimes.getPrayerTimes();
 
-    // navigation to the home screen
+    // sets up prayer times data object and creates prayerData object
+    PrayerTimes prayerTimes = PrayerTimes(setting);
+    List<Map> prayerData = await prayerTimes.getPrayerTimes();
+
+    // navigation and data transfer to the home screen
     Navigator.pushReplacementNamed(context, '/nav_hub', arguments: {
-      'prayer_times': prayerTimes.prayerTimesData,
+
       'longitude': prayerTimes.longitude,
       'latitude': prayerTimes.latitude,
       'current_day': setting.day,
-      'city': setting.city
+      'city': setting.city //TODO still
     });
   }
 

@@ -14,8 +14,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
 
-  void setState(fn) {
-    if (mounted) super.setState(fn);
+  void setState(func) {
+    if (mounted) super.setState(func);
   }
 
   Map data = {};
@@ -26,7 +26,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     // TODO maybe put card widget in another function/class and put timer in there for cleaner code
-    // refreshes page ever n seconds
+    // sets state every n seconds
     int n = 1;
     new Timer.periodic(Duration(seconds: n), (Timer t) =>
       setState((){
@@ -45,7 +45,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed || state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed) {
       setState(() {
         Navigator.pushReplacementNamed(context, '/');
       });
@@ -55,71 +55,73 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
 
-    // TODO 1 move all the data organization to the loading screen
-    // data that was passed through from the loading screen
-    data = ModalRoute.of(context)!.settings.arguments as Map;
-    int currDay = data['current_day'];
-    int currMonth = data['prayer_times']['data'][currDay-1]['date']['gregorian']['month']['number'];
-    String currYear = data['prayer_times']['data'][currDay-1]['date']['gregorian']['year'];
-
-    // creates map for storing timings of prayers and other events
-    Map timings = data['prayer_times']['data'][currDay-1]['timings'];
-
-    // removing unneeded key-value pairs
-    timings.remove('Sunset'); // same as maghrib
-    timings.remove('Imsak'); // might be used in future
-    timings.remove('Midnight'); // might be used in future
-
-    timings.forEach((key, value) {
-      // converts timing to ISO format as a DateTime type for future
-      // comparisons with current time
-      String formattedMonth = currMonth.toString();
-      String formattedDay = currDay.toString();
-      if(currMonth < 10) {
-        formattedMonth = '0$currMonth';
-      }
-      if(currDay < 10) {
-        formattedDay = '0$currDay';
-      }
-
-      // checks if time is already formatted (in cases of app reloading after initial startup, etc)
-      if(value is String) {
-        String tempTime =value.toString().substring(0,5);
-        String formattedTime = '$currYear-$formattedMonth-$formattedDay $tempTime:00';
-        timings[key] = DateTime.parse(formattedTime);
-      }
-
-      /* TODO fix cases in which timings bleed into the next day but display as current day.
-          May depend on timezone of the user, but might not be a problem if we disregard
-          midnight timing all together. Might not be a problem actually since midnight could in fact
-          be referring to the current day's midnight.
-      */
-
-      // debugging
-      // print(key+': '+timings[key].toString());
-      //
-    });
+    // // data that was passed through from the loading screen
+    // data = ModalRoute.of(context)!.settings.arguments as Map;
+    //
+    // // TODO 1 move all the data organization to the loading screen
+    // int currDay = data['current_day'];
+    // int currMonth = data['prayer_times']['data'][currDay-1]['date']['gregorian']['month']['number'];
+    // String currYear = data['prayer_times']['data'][currDay-1]['date']['gregorian']['year'];
+    // print(currYear);
+    //
+    // // creates map for storing timings of prayers and other events
+    // Map timings = data['prayer_times']['data'][currDay-1]['timings'];
+    //
+    // // removing unneeded key-value pairs
+    // timings.remove('Sunset'); // same as maghrib
+    // timings.remove('Imsak'); // might be used in future
+    // timings.remove('Midnight'); // might be used in future
+    //
+    // timings.forEach((key, value) {
+    //   // converts timing to ISO format as a DateTime type for future
+    //   // comparisons with current time
+    //   String formattedMonth = currMonth.toString();
+    //   String formattedDay = currDay.toString();
+    //   if(currMonth < 10) {
+    //     formattedMonth = '0$currMonth';
+    //   }
+    //   if(currDay < 10) {
+    //     formattedDay = '0$currDay';
+    //   }
+    //
+    //   // checks if time is already formatted (in cases of app reloading after initial startup, etc)
+    //   if(value is String) {
+    //     String tempTime =value.toString().substring(0,5);
+    //     String formattedTime = '$currYear-$formattedMonth-$formattedDay $tempTime:00';
+    //     timings[key] = DateTime.parse(formattedTime);
+    //   }
+    //
+    //   /* TODO fix cases in which timings bleed into the next day but display as current day.
+    //       May depend on timezone of the user, but might not be a problem if we disregard
+    //       midnight timing all together. Might not be a problem actually since midnight could in fact
+    //       be referring to the current day's midnight.
+    //   */
+    //
+    //   // debugging
+    //   // print(key+': '+timings[key].toString());
+    //   //
+    // });
 
     // TODO 1: end of data section
 
     // sets up the upcoming and previous timings
     List<String> upcomingDisplayedTiming = ['', ''];
     List<String> previousDisplayedTiming = ['', ''];
-
-    DateTime currentTime = DateTime.now();
-
-    for(String key in timings.keys) {
-      if(currentTime.isBefore(timings[key])) {
-        List<String> temp = [
-          key,
-          DateFormat.jm().format(timings[key]).toLowerCase()
-        ];
-        upcomingDisplayedTiming = temp;
-        break;
-      }
-    }
-    print(upcomingDisplayedTiming[0]+', '+upcomingDisplayedTiming[1]);
-    print(timings);
+    //
+    // DateTime currentTime = DateTime.now();
+    //
+    // for(String key in timings.keys) {
+    //   if(currentTime.isBefore(timings[key])) {
+    //     List<String> temp = [
+    //       key,
+    //       DateFormat.jm().format(timings[key]).toLowerCase()
+    //     ];
+    //     upcomingDisplayedTiming = temp;
+    //     break;
+    //   }
+    // }
+    // print(upcomingDisplayedTiming[0]+', '+upcomingDisplayedTiming[1]);
+    // print(timings);
 
     return Scaffold(
       body: SafeArea(
@@ -258,10 +260,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                         ),
                       ),
                       Text(
-                          '${data['prayer_times']['data'][currDay-1]['date']['gregorian']['weekday']['en']}, '
-                              '${data['prayer_times']['data'][currDay-1]['date']['gregorian']['month']['en']} '
-                              '$currDay, '
-                              '$currYear',
+                          '',
                           style: TextStyle(
                               fontSize: 24,
                               color: Colors.black,
@@ -277,9 +276,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                         ),
                       ),
                       Text(
-                          '${data['prayer_times']['data'][currDay-1]['date']['hijri']['month']['en'].replaceAll('ʿ', '\'')} '
-                              '${data['prayer_times']['data'][currDay-1]['date']['hijri']['day']}, '
-                              '${data['prayer_times']['data'][currDay-1]['date']['hijri']['year']} AH',
+                          '',
                           style: TextStyle(
                               fontSize: 24,
                               color: Colors.black,
