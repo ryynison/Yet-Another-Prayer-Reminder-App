@@ -55,73 +55,83 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
 
-    // // data that was passed through from the loading screen
-    // data = ModalRoute.of(context)!.settings.arguments as Map;
-    //
-    // // TODO 1 move all the data organization to the loading screen
-    // int currDay = data['current_day'];
-    // int currMonth = data['prayer_times']['data'][currDay-1]['date']['gregorian']['month']['number'];
-    // String currYear = data['prayer_times']['data'][currDay-1]['date']['gregorian']['year'];
-    // print(currYear);
-    //
-    // // creates map for storing timings of prayers and other events
-    // Map timings = data['prayer_times']['data'][currDay-1]['timings'];
-    //
-    // // removing unneeded key-value pairs
-    // timings.remove('Sunset'); // same as maghrib
-    // timings.remove('Imsak'); // might be used in future
-    // timings.remove('Midnight'); // might be used in future
-    //
-    // timings.forEach((key, value) {
-    //   // converts timing to ISO format as a DateTime type for future
-    //   // comparisons with current time
-    //   String formattedMonth = currMonth.toString();
-    //   String formattedDay = currDay.toString();
-    //   if(currMonth < 10) {
-    //     formattedMonth = '0$currMonth';
-    //   }
-    //   if(currDay < 10) {
-    //     formattedDay = '0$currDay';
-    //   }
-    //
-    //   // checks if time is already formatted (in cases of app reloading after initial startup, etc)
-    //   if(value is String) {
-    //     String tempTime =value.toString().substring(0,5);
-    //     String formattedTime = '$currYear-$formattedMonth-$formattedDay $tempTime:00';
-    //     timings[key] = DateTime.parse(formattedTime);
-    //   }
-    //
-    //   /* TODO fix cases in which timings bleed into the next day but display as current day.
-    //       May depend on timezone of the user, but might not be a problem if we disregard
-    //       midnight timing all together. Might not be a problem actually since midnight could in fact
-    //       be referring to the current day's midnight.
-    //   */
-    //
-    //   // debugging
-    //   // print(key+': '+timings[key].toString());
-    //   //
-    // });
-
-    // TODO 1: end of data section
+    // data that was passed through from the loading screen
+    data = ModalRoute.of(context)!.settings.arguments as Map;
 
     // sets up the upcoming and previous timings
     List<String> upcomingDisplayedTiming = ['', ''];
     List<String> previousDisplayedTiming = ['', ''];
-    //
-    // DateTime currentTime = DateTime.now();
-    //
-    // for(String key in timings.keys) {
-    //   if(currentTime.isBefore(timings[key])) {
-    //     List<String> temp = [
-    //       key,
-    //       DateFormat.jm().format(timings[key]).toLowerCase()
-    //     ];
-    //     upcomingDisplayedTiming = temp;
-    //     break;
-    //   }
-    // }
-    // print(upcomingDisplayedTiming[0]+', '+upcomingDisplayedTiming[1]);
-    // print(timings);
+
+    DateTime currentTime = DateTime.now();
+
+    // Determining previous/upcoming display times
+    // (will probably be overhauled completely later, current solution is pure jank)
+    for(String key in data['today_timings'].keys) {
+      if(currentTime.isBefore(data['today_timings'][key])) {
+        List<String> temp1 = [];
+        String keyTemp;
+        switch(key) {
+          case 'Fajr': {
+            keyTemp = 'Midnight';
+            temp1 = [
+              keyTemp,
+              DateFormat.jm().format(data['yesterday_timings'][keyTemp]).toLowerCase()
+            ];
+          } break;
+          case 'Sunrise': {
+            keyTemp = 'Fajr';
+            temp1 = [
+              keyTemp,
+              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+            ];
+          } break;
+          case 'Dhuhr': {
+            keyTemp = 'Sunrise';
+            temp1 = [
+              keyTemp,
+              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+            ];
+          } break;
+          case 'Asr': {
+            keyTemp = 'Dhuhr';
+            temp1 = [
+              keyTemp,
+              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+            ];
+          } break;
+          case 'Maghrib': {
+            keyTemp = 'Asr';
+            temp1 = [
+              keyTemp,
+              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+            ];
+          } break;
+          case 'Isha': {
+            keyTemp = 'Maghrib';
+            temp1 = [
+              keyTemp,
+              DateFormat.jm().format(data['today_timings'][keyTemp]).toLowerCase()
+            ];
+          } break;
+          case 'Midnight': {
+            keyTemp = 'Isha';
+            temp1 = [
+              keyTemp,
+              DateFormat.jm().format(data['tomorrow_timings'][keyTemp]).toLowerCase()
+            ];
+          } break;
+        }
+
+        previousDisplayedTiming = temp1;
+
+        List<String> temp2 = [
+          key,
+          DateFormat.jm().format(data['today_timings'][key]).toLowerCase()
+        ];
+        upcomingDisplayedTiming = temp2;
+        break;
+      }
+    }
 
     return Scaffold(
       body: SafeArea(
