@@ -11,11 +11,6 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
-  /* TODO complete overhaul of data (congregate previous month, current month, and
-      next months prayer times into one large list in order avoid monthly edge cases
-      (we would still need to compensate for the yearly edge cases though)
-  */
-
   // initializes the prayer time data called from the API/loaded from cache
   // and then navigates to the home screen when the data is loaded
   void initData() async {
@@ -53,6 +48,7 @@ class _LoadingState extends State<Loading> {
     temp.forEach((timings) {
       timings.remove('Sunset');
       timings.remove('Imsak');
+      timings.remove('Midnight');
 
       timings.forEach((key, value) {
         // converts timing to ISO format as a DateTime type for future
@@ -91,7 +87,7 @@ class _LoadingState extends State<Loading> {
       'longitude': prayerTimes.longitude,
       'latitude': prayerTimes.latitude,
       // city name
-      'city': setting.city //TODO still
+      'city': setting.city //TODO
     });
   }
 

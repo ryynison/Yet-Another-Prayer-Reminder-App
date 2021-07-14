@@ -68,7 +68,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         String keyTemp;
         switch(key) {
           case 'Fajr': {
-            keyTemp = 'Midnight';
+            keyTemp = 'Isha';
             temp1 = [
               keyTemp,
               data['yesterday_timings'][keyTemp]
@@ -109,13 +109,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
               data['today_timings'][keyTemp]
             ];
           } break;
-          case 'Midnight': {
-            keyTemp = 'Isha';
-            temp1 = [
-              keyTemp,
-              data['tomorrow_timings'][keyTemp]
-            ];
-          } break;
         }
 
         previousTiming = temp1;
@@ -131,7 +124,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     // Calculate time difference for countdown timer
     int difference = upcomingTiming[1].difference(currentTime).inSeconds;
-    String countdown = '-${Duration(seconds: difference).toString().substring(0,7)}';
+    String countdown = '- ${Duration(seconds: difference).toString().substring(0,7)}';
+
 
     return Scaffold(
       body: SafeArea(
@@ -296,7 +290,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                     ],
                   ),
                 ),
-                //Text('Fajr: '+prayerData['prayer_times']['data'][4]['timings']['Fajr'])
               ],
             ),
           ),
