@@ -76,6 +76,9 @@ class _LoadingState extends State<Loading> {
     });
 
     // TODO set up dates and pass through to navigator
+    /* TODO implement deletion of cache after 50 and other
+        situations such as sufficiently past months
+    */
 
     // navigation and data transfer to the home screen
     Navigator.pushReplacementNamed(context, '/nav_hub', arguments: {
