@@ -52,7 +52,7 @@ class PrayerTimes {
       // setup for caching
       String adjustedLat = double.parse(latitude).toStringAsFixed(1).replaceAll('.', 'p');
       String adjustedLong = double.parse(longitude).toStringAsFixed(1).replaceAll('.', 'p');
-      String cacheName = '$callYear-$callMonth-$adjustedLat-$adjustedLong.json';
+      String cacheName = '$callYear-$callMonth-${adjustedLat}_$adjustedLong.json';
       Directory appDocDir = await getApplicationDocumentsDirectory();
       File cache = File('${appDocDir.path}/$cacheName');
 
