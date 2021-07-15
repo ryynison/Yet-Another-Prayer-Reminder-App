@@ -50,6 +50,8 @@ class PrayerTimes {
       }
 
       // setup for caching
+      /* adjustedLat & adjustedLong designed such that same cache is used if not
+       too far from original location (within ~11km) */
       String adjustedLat = double.parse(latitude).toStringAsFixed(1).replaceAll('.', 'p');
       String adjustedLong = double.parse(longitude).toStringAsFixed(1).replaceAll('.', 'p');
       String cacheName = '$callYear-$callMonth-${adjustedLat}_$adjustedLong.json';

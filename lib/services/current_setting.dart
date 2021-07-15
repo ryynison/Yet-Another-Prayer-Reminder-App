@@ -21,9 +21,11 @@ class CurrentSetting {
 
   Future<void> getCurrentLocation() async {
 
+    /* TODO prevent trying to get city name if not
+        traveled certain distance to prevent loading slow down */
+
     // get coordinates of current position
     location = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
-    // TODO convert coordinates to city
 
     // get city and country name from location for displaying
     final coordinates = Coordinates(location.latitude, location.longitude);
