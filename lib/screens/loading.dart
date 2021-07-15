@@ -76,7 +76,6 @@ class _LoadingState extends State<Loading> {
     });
 
     // TODO set up dates and pass through to navigator
-    // TODO implement deletion of prayer cache if user is in new location certain distance away from current cache
 
     // navigation and data transfer to the home screen
     Navigator.pushReplacementNamed(context, '/nav_hub', arguments: {
