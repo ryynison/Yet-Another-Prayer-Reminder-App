@@ -101,12 +101,27 @@ class _HomeState extends State<Home> {
           key,
           data['today_timings'][key]
         ];
+
         upcomingTiming = temp2;
         break;
+      } else {
+        // quick patch for displayed timing after isha and before next day starts,
+        // reveals fragility of current system (☉__☉”)
+        upcomingTiming = [
+          'Fajr',
+          data['tomorrow_timings']['Fajr']
+        ];
+        previousTiming = [
+          'Isha',
+          data['today_timings']['Isha']
+        ];
+
       }
     }
 
     // Calculate time difference for countdown timer
+    print(upcomingTiming);
+    print(previousTiming);
     int difference = upcomingTiming[1].difference(currentTime).inSeconds;
     String countdown = '- ${Duration(seconds: difference).toString().substring(0,7)}';
 

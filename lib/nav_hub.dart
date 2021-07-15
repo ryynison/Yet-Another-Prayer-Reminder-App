@@ -56,7 +56,7 @@ class _NavHubState extends State<NavHub> with WidgetsBindingObserver {
         transitionType: TransitionType.fade,
         transitionDuration: Duration(milliseconds: 200),
         transitionCurve: Curves.ease,
-      ),//widgets.elementAt(currIndex),
+      ),
       bottomNavigationBar:
           // TODO change bottom nav bar to nicer design
         BottomNavigationBar(
