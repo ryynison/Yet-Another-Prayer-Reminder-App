@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
                 Row(
                     children: [
                     Text(
-                      'Elk Grove',
+                      data['city'],
                       style: TextStyle(
                           fontSize: 24,
                           color: Colors.black,
