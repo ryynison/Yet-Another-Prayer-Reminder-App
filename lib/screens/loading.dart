@@ -20,7 +20,7 @@ class _LoadingState extends State<Loading> {
     await setting.getCurrentLocation();
 
     // sets up prayer times data object and creates prayerData object
-    PrayerTimes prayerTimes = PrayerTimes(setting);
+    PrayerTimes prayerTimes = PrayerTimes(setting, school: 1);
     List<Map> monthlyData = await prayerTimes.getPrayerTimes();
 
     // setting up timing data

@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with WidgetsBindingObserver {
+class _HomeState extends State<Home> {
 
   void setState(func) {
     if (mounted) super.setState(func);
@@ -25,27 +25,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    // TODO maybe put card widget in another function/class and put timer in there for cleaner code
     // sets state every n seconds
     int n = 1;
     new Timer.periodic(Duration(seconds: n), (Timer t) =>
       setState((){})
     );
-    WidgetsBinding.instance!.addObserver(this);
-  }
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
-  }
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      setState(() {
-        Navigator.pushReplacementNamed(context, '/');
-      });
-    }
   }
 
   @override
