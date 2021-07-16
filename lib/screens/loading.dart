@@ -68,19 +68,27 @@ class _LoadingState extends State<Loading> {
         }
 
         // checks if time is already formatted (in cases of app reloading after initial startup, etc)
-      if (value is String) {
+        if (value is String) {
           String tempTime =value.toString().substring(0,5);
           String formattedTime = '${setting.year}-$formattedMonth-$formattedDay $tempTime:00';
           timings[key] = DateTime.parse(formattedTime);
         }
 
-      // checks to see if yesterdayTimings/tomorrowTimings
-      // if so, adjusts date accordingly
-      if (index == 1) {
-        timings[key] = timings[key].subtract(Duration(days: 1));
-      } else if (index == 2) {
-        timings[key] = timings[key].add(Duration(days: 1));
-      }
+        // checks to see if yesterdayTimings/tomorrowTimings
+        // if so, adjusts date accordingly
+        if (index == 1) {
+          timings[key] = timings[key].subtract(Duration(days: 1));
+        } else if (index == 2) {
+          timings[key] = timings[key].add(Duration(days: 1));
+        }
+
+        // edge cases in Arctic region because why not
+        if (key == 'Isha' && (timings[key].hour < 6)) {
+          timings[key] = timings[key].add(Duration(days: 1));
+        }
+        if ((key == 'Fajr' || key == 'Sunrise') && (timings[key].hour > 20)) {
+          timings[key] = timings[key].subtract(Duration(days: 1));
+        }
       });
       index++;
     });

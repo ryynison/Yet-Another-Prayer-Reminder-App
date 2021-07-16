@@ -119,11 +119,18 @@ class _HomeState extends State<Home> {
       }
     }
 
+    print(data['yesterday_timings']);
+    print(data['today_timings']);
+    print(data['tomorrow_timings']);
+    print('\n');
+
     // Calculate time difference for countdown timer
-    print('u$upcomingTiming');
-    print('p$previousTiming');
     int difference = upcomingTiming[1].difference(currentTime).inSeconds;
-    String countdown = '- ${Duration(seconds: difference).toString().substring(0,7)}';
+    int k = 7;
+    if (difference>=36000) {
+      k = 8;
+    }
+    String countdown = '- ${Duration(seconds: difference).toString().substring(0,k)}';
 
 
     return Scaffold(
