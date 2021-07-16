@@ -45,34 +45,44 @@ class _LoadingState extends State<Loading> {
     List<Map> temp = [todayTimings, yesterdayTimings, tomorrowTimings];
 
     // pruning useless key-value pairs (sunset is same as maghrib, and imsak is unneeded for now)
+    int index = 0; // indexes for [todayTimings, yesterdayTimings, tomorrowTimings]
     temp.forEach((timings) {
       timings.remove('Sunset');
       timings.remove('Imsak');
       timings.remove('Midnight');
 
+      // most painful code i ever had to write ever, my condolences for any reader
+      // who is trying to figure out what is going on cause i have no idea either
+      // God bless
       timings.forEach((key, value) {
         // converts timing to ISO format as a DateTime type for future
         // comparisons with current time
         String formattedMonth = setting.month.toString();
         String formattedDay = setting.day.toString();
-        if(setting.month < 10) {
+
+        if (setting.month < 10) {
           formattedMonth = '0${setting.month}';
         }
-        if(setting.day < 10) {
+        if (setting.day < 10) {
           formattedDay = '0${setting.day}';
         }
+
         // checks if time is already formatted (in cases of app reloading after initial startup, etc)
-        if(value is String) {
+      if (value is String) {
           String tempTime =value.toString().substring(0,5);
           String formattedTime = '${setting.year}-$formattedMonth-$formattedDay $tempTime:00';
           timings[key] = DateTime.parse(formattedTime);
         }
 
-        // debugging
-        //print(key+': '+timings[key].toString());
-        //
-
+      // checks to see if yesterdayTimings/tomorrowTimings
+      // if so, adjusts date accordingly
+      if (index == 1) {
+        timings[key] = timings[key].subtract(Duration(days: 1));
+      } else if (index == 2) {
+        timings[key] = timings[key].add(Duration(days: 1));
+      }
       });
+      index++;
     });
 
     // TODO set up dates and pass through to navigator

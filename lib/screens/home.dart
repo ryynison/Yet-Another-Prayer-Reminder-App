@@ -120,8 +120,8 @@ class _HomeState extends State<Home> {
     }
 
     // Calculate time difference for countdown timer
-    print(upcomingTiming);
-    print(previousTiming);
+    print('u$upcomingTiming');
+    print('p$previousTiming');
     int difference = upcomingTiming[1].difference(currentTime).inSeconds;
     String countdown = '- ${Duration(seconds: difference).toString().substring(0,7)}';
 
